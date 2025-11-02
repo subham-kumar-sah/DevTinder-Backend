@@ -1,30 +1,52 @@
 const express = require("express");
 const app = express();
 
+app.get("/getUserdata", (req, res) => {
+  try {
+    throw new Error("Simulated Server Error");
+    res.send("User Data Retrieved Successfully");
+  } catch (err) {
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+// Not required if using the try-catch in each route
+app.use("/", (err, req, res, next) => {
+  if (err) {
+    res.status(500).send("Something broke! Internal Server Error.");
+  }
+});
+
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
 });
 
-const { adminAuth, userAuth } = require("./middlewares/auth");
+//-------------------------------------------------
 
-app.use("/admin", adminAuth);
+//Auth Middleware Implementation
 
-app.get("/admin/getAllData", (req, res) => {
-  res.send("All User Data from Admin Route");
-});
+// const { adminAuth, userAuth } = require("./middlewares/auth");
 
-app.get("/admin/deleteAllData", (req, res) => {
-  res.send("All User Data Deleted from Admin Route");
-});
+// app.use("/admin", adminAuth);
 
-app.post("/user/logIn", (req, res) => {
-  console.log("User LogIn Route Accessed");
-  res.send("User logged in successfully");
-});
+// app.get("/admin/getAllData", (req, res) => {
+//   res.send("All User Data from Admin Route");
+// });
 
-app.get("/user/getData", userAuth, (req, res) => {
-  res.send("User Route Accessed");
-});
+// app.get("/admin/deleteAllData", (req, res) => {
+//   res.send("All User Data Deleted from Admin Route");
+// });
+
+// app.post("/user/logIn", (req, res) => {
+//   console.log("User LogIn Route Accessed");
+//   res.send("User logged in successfully");
+// });
+
+// app.get("/user/getData", userAuth, (req, res) => {
+//   res.send("User Route Accessed");
+// });
+
+//-----------------------------------------------------------------
 
 // Middleware to handle all incoming requests for path "/user" with multiple request handlers
 
